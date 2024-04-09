@@ -1,0 +1,37 @@
+---
+repos:
+
+  - repo: https://github.com/ashwin153/pre-commit-vagrant
+    rev: v1.2.0
+    hooks:
+      - id: vagrant-validate
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+        args:
+          - --fix=auto
+      - id: trailing-whitespace
+      - id: destroyed-symlinks
+      - id: check-symlinks
+      - id: check-shebang-scripts-are-executable
+
+  - repo: https://github.com/tcort/markdown-link-check
+    rev: v3.12.1
+    hooks:
+      - id: markdown-link-check
+        args:
+          - --alive=200,301,302,402,403,407
+          - --quiet
+
+  - repo: https://github.com/koalaman/shellcheck-precommit
+    rev: v0.10.0
+    hooks:
+      - id: shellcheck
+        args:
+          - --norc
+          - --check-sourced
+          - --severity=error
+          - --external-sources

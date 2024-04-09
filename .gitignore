@@ -1,0 +1,14 @@
+.DS_Store
+.idea/
+.project
+.vagrant/
+.vscode/
+*.bak
+*.log
+*.orig
+*.swp
+*.tgz
+*.tmp
+*.tmproj
+*~
+outputs/

@@ -1,0 +1,292 @@
+set history=1000            " sets how many lines of history VIM has to remember
+set number                  " show line numbers
+set path+=**                " recurse into dirs
+filetype plugin indent on   " Enable filetype plugins
+
+command! MakeTags !ctags -R .
+
+let g:netrw_banner=0        " disable annoying banner
+let g:netrw_browse_split=4  " open in prior window
+let g:netrw_altv=1          " open splits to the right
+let g:netrw_liststyle=3     " tree view
+let g:netrw_list_hide=netrw_gitignore#Hide()
+let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
+
+set autoread
+au FocusGained,BufEnter * checktime
+
+let mapleader = ","
+
+nmap <leader>w :w!<cr>
+
+command W w !sudo tee % > /dev/null " :W sudo saves the file when the file is open in readonly mode
+
+set nocompatible                    " yup
+set showcmd                         " show command in bottom bar
+set title                           " change the terminal's title
+
+set foldcolumn=1                    " Add a bit extra margin to the left
+set foldenable                      " enable folding
+set foldmethod=manual               " fold method
+set foldlevelstart=10               " open most folds by default
+set foldnestmax=10                  " 10 nested fold max
+
+nnoremap <space> za
+
+nnoremap gV \`[v\`]
+if exists('$TMUX')                  " allows cursor change in tmux mode
+    let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+    let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+else
+    let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+    let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+endif
+
+nmap <F3> i<C-R>=strftime("\n# %Y-%m-%d %T \t\t")<CR><Esc>
+imap <F3> <C-R>=strftime("\n# %Y-%m-%d %T \t\t")<CR>
+
+function ToggleWrap()
+    if (&wrap == 1)
+        set nowrap
+    else
+        set wrap
+    endif
+endfunction
+map <F10> :call ToggleWrap()<CR>
+map! <F10> ^[:call ToggleWrap()<CR>
+
+set so=7
+
+let $LANG='en'
+set langmenu=en
+source $VIMRUNTIME/delmenu.vim
+source $VIMRUNTIME/menu.vim
+
+set wildmenu
+
+set wildignore=*.o,*~,*.pyc,*.swp,*.bak,*.pyc,*.class
+if has("win16") || has("win32")
+    set wildignore+=.git\*,.hg\*,.svn\*
+else
+    set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
+endif
+
+set ruler
+set cmdheight=1
+set hid
+set backspace=eol,start,indent
+set whichwrap+=<,>,h,l
+set ignorecase
+set smartcase
+set hlsearch
+set incsearch
+set lazyredraw
+set magic
+set showmatch
+set mat=2
+set noerrorbells
+set novisualbell
+set t_vb=
+set tm=500
+syntax enable
+
+if $COLORTERM == 'gnome-terminal'
+    set t_Co=256
+endif
+
+try
+    "colorscheme elflord
+    colorscheme ron
+catch
+endtry
+
+set background=dark
+set cursorline                      " highlight current line
+"hi CursorLine cterm=BOLD ctermbg=gray
+
+if has("gui_running")
+    set guioptions-=T
+    set guioptions-=e
+    set t_Co=256
+    set guitablabel=%M\ %t
+endif
+
+set encoding=utf8
+set ffs=unix,dos,mac
+set nobackup
+set nowb
+set noswapfile
+set expandtab
+set smarttab
+set shiftwidth=2
+set tabstop=2
+set lbr
+set tw=500
+set ai "Auto indent
+set si "Smart indent
+set wrap "Wrap lines
+
+vnoremap <silent> * :<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
+vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
+
+map <C-space> ?
+map <silent> <leader><cr> :noh<cr>
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
+map <leader>bd :Bclose<cr>:tabclose<cr>gT
+map <leader>ba :bufdo bd<cr>
+map <leader>l :bnext<cr>
+map <leader>h :bprevious<cr>
+map <leader>tn :tabnew<cr>
+map <leader>to :tabonly<cr>
+map <leader>tc :tabclose<cr>
+map <leader>tm :tabmove
+map <leader>t<leader> :tabnext
+let g:lasttab = 1
+nmap <Leader>tl :exe "tabn ".g:lasttab<CR>
+au TabLeave * let g:lasttab = tabpagenr()
+map <leader>te :tabedit <C-r>=expand("%:p:h")<cr>/
+map <leader>cd :cd %:p:h<cr>:pwd<cr>
+try
+  set switchbuf=useopen,usetab,newtab
+  set stal=2
+catch
+endtry
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
+set laststatus=2
+set noshowmode
+set statusline=
+set statusline+=%7*\[%n]                                  "buffernr
+set statusline+=%1*\ %<%F\                                "File+path
+set statusline+=%2*\ %y\                                  "FileType
+set statusline+=%3*\ %{''.(&fenc!=''?&fenc:&enc).''}      "Encoding
+set statusline+=%3*\ %{(&bomb?\",BOM\":\"\")}\            "Encoding2
+set statusline+=%4*\ %{&ff}\                              "FileFormat (dos/unix..)
+set statusline+=%5*\ %{&spelllang}\%{HighlightSearch()}\  "Spellanguage & Highlight on?
+set statusline+=%8*\ %=\ row:%l/%L\ (%03p%%)\             "Rownumber/total (%)
+set statusline+=%9*\ col:%03c\                            "Colnr
+set statusline+=%0*\ \ %m%r%w\ %P\ \                      "Modified? Readonly? Top/bot.
+
+if version >= 700
+  au InsertEnter * hi StatusLine term=reverse ctermfg=5 ctermbg=15 gui=undercurl guisp=Magenta
+  au InsertLeave * hi StatusLine term=reverse ctermfg=2 ctermbg=15 gui=bold,reverse
+endif
+
+function! HighlightSearch()
+    if &hls
+        return 'H'
+    else
+        return ''
+    endif
+endfunction
+
+map 0 ^
+nmap <M-j> mz:m+<cr>\`z
+nmap <M-k> mz:m-2<cr>\`z
+vmap <M-j> :m'>+<cr>\`<my\`>mzgv\`yo\`z
+vmap <M-k> :m'<-2<cr>\`>my\`<mzgv\`yo\`z
+
+if has("mac") || has("macunix")
+    nmap <D-j> <M-j>
+    nmap <D-k> <M-k>
+    vmap <D-j> <M-j>
+    vmap <D-k> <M-k>
+endif
+
+" Delete trailing white space on save, useful for some filetypes ;)
+fun! CleanExtraSpaces()
+    let save_cursor = getpos(".")
+    let old_query = getreg('/')
+    silent! %s/\s\+$//e
+    call setpos('.', save_cursor)
+    call setreg('/', old_query)
+endfun
+
+if has("autocmd")
+    autocmd BufWritePre *.txt,*.js,*.py,*.wiki,*.sh,*.coffee :call CleanExtraSpaces()
+endif
+
+map <leader>ss :setlocal spell!<cr>
+map <leader>sn ]s
+map <leader>sp [s
+map <leader>sa zg
+map <leader>s? z=
+
+noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
+map <leader>q :e ~/buffer<cr>
+map <leader>x :e ~/buffer.md<cr>
+map <leader>pp :setlocal paste!<cr>
+
+function! HasPaste()
+    if &paste
+        return 'PASTE MODE  '
+    endif
+    return ''
+endfunction
+
+command! Bclose call <SID>BufcloseCloseIt()
+function! <SID>BufcloseCloseIt()
+    let l:currentBufNum = bufnr("%")
+    let l:alternateBufNum = bufnr("#")
+
+    if buflisted(l:alternateBufNum)
+        buffer #
+    else
+        bnext
+    endif
+
+    if bufnr("%") == l:currentBufNum
+        new
+    endif
+
+    if buflisted(l:currentBufNum)
+        execute("bdelete! ".l:currentBufNum)
+    endif
+endfunction
+
+function! CmdLine(str)
+    call feedkeys(":" . a:str)
+endfunction
+
+function! VisualSelection(direction, extra_filter) range
+    let l:saved_reg = @"
+    execute "normal! vgvy"
+
+    let l:pattern = escape(@", "\\/.*'$^~[]")
+    let l:pattern = substitute(l:pattern, "\n$", "", "")
+
+    if a:direction == 'gv'
+        call CmdLine("Ack '" . l:pattern . "' " )
+    elseif a:direction == 'replace'
+        call CmdLine("%s" . '/'. l:pattern . '/')
+    endif
+
+    let @/ = l:pattern
+    let @" = l:saved_reg
+endfunction
+
+highlight lineNr term=bold cterm=NONE ctermbg=none  ctermfg=none gui=bold
+highlight CursorLineNr term=bold cterm=none ctermbg=none ctermfg=yellow gui=bold
+
+let g:fzf_colors =
+\ { 'fg':         ['fg', 'Normal'],
+  \ 'bg':         ['bg', 'Normal'],
+  \ 'preview-bg': ['bg', 'NormalFloat'],
+  \ 'hl':         ['fg', 'Comment'],
+  \ 'fg+':        ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':        ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':        ['fg', 'Statement'],
+  \ 'info':       ['fg', 'PreProc'],
+  \ 'border':     ['fg', 'Ignore'],
+  \ 'prompt':     ['fg', 'Conditional'],
+  \ 'pointer':    ['fg', 'Exception'],
+  \ 'marker':     ['fg', 'Keyword'],
+  \ 'spinner':    ['fg', 'Label'],
+  \ 'header':     ['fg', 'Comment'] }
+
+set nowrap                  " don't wrap lines
+set rtp+=/usr/local/opt/fzf
+highlight ExtraWhiteSpace ctermbg=red guibg=red
