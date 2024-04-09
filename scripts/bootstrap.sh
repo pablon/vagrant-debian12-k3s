@@ -41,13 +41,7 @@ apt-get dist-upgrade -qqqy && apt-get -qqqy update && apt-get -qqqy upgrade
 
 _banner "Installing OS packages"
 apt-get install ${APT_OPTIONS} curl wget parted procps coreutils sudo sed gawk nmap vim tree \
-    htop git net-tools netcat-traditional ca-certificates gnupg lsb-release tar gzip bzip2 jq dpkg-dev || exit 1
-
-# disable/remove exim4 previously installed as dependency
-# systemctl stop exim4
-# systemctl disable exim4
-# apt-get remove ${APT_OPTIONS} 'exim4-*'
-# userdel -r Debian-exim &>/dev/null
+  htop git net-tools netcat-traditional ca-certificates gnupg lsb-release tar gzip bzip2 jq dpkg-dev || exit 1
 
 # disable ipv6
 echo -e "\nnet.ipv6.conf.default.disable_ipv6=1" >> /etc/sysctl.d/99-sysctl.conf
@@ -226,7 +220,6 @@ sed -i -e "/server:/ s|0.0.0.0|${EXTERNAL_IP}|" -e "11s|default|${NODE_NAME}|" -
 
 _banner "Waiting until all pods are in Running state..."
 until [ "$(kubectl --kubeconfig ${OUTPUT_DIR}/${NODE_NAME}.yaml get pod --field-selector 'status.phase!=Running' -A -o name 2>/dev/null | wc -l | xargs)" == "0" ] ; do
-# while [ ! -z "$(kubectl --kubeconfig ${OUTPUT_DIR}/${NODE_NAME}.yaml get pod --field-selector 'status.phase!=Running' -A -o name 2>/dev/null)" ] ; do
   echo '.' ; sleep 1
 done
 echo -e "✅ Done"
