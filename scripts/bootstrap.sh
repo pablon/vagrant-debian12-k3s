@@ -218,10 +218,8 @@ cp -vpf /etc/rancher/k3s/k3s.yaml "${HOME}/.kube/config"
 cp -vpf /etc/rancher/k3s/k3s.yaml "/home/vagrant/.kube/config"
 sed -i -e "/server:/ s|0.0.0.0|${EXTERNAL_IP}|" -e "11s|default|${NODE_NAME}|" -e "/current-context:/ s|default|${NODE_NAME}|" "${OUTPUT_DIR}/${NODE_NAME}.yaml"
 
-_banner "Waiting until all pods are in Running state..."
-until [ "$(kubectl --kubeconfig ${OUTPUT_DIR}/${NODE_NAME}.yaml get pod --field-selector 'status.phase!=Running' -A -o name 2>/dev/null | wc -l | xargs)" == "0" ] ; do
-  echo '.' ; sleep 1
-done
+_banner "Waiting 40s until all pods are in Running state..."
+sleep 40
 echo -e "✅ Done"
 
 # ===============================================================
