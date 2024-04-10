@@ -45,4 +45,3 @@ jobs:
         id: test
         run: |
           ./run.sh
-
