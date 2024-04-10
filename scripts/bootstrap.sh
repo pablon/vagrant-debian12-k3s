@@ -193,7 +193,7 @@ echo "✅ /etc/cron.d/timesync"
 
 
 # set root password
-ROOT_PASSWD="$(echo "${ROOT_PASSWD}" | base64 -d)" ; echo -e "${ROOT_PASSWD}\n${ROOT_PASSWD}" | passwd root &>/dev/null && \
+ROOT_PASSWD="$(echo "${ROOT_PASSWD}" | base64 -d)" ; echo -e "${ROOT_PASSWD}\n${ROOT_PASSWD}" | passwd root &>/dev/null
 echo "✅ root passsword"
 
 # ===============================================================
