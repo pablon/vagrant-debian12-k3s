@@ -98,9 +98,11 @@ _banner "root password saved as ${CYAN}${OUTPUT_DIR}/root_password.txt"
 _banner "KUBECONFIG saved as ${CYAN}${OUTPUT_DIR}/${NODE_NAME}.yaml"
 
 # ===============================================================
-VM_SNAPSHOT_NAME="base-$(date +%Y%m%d-%H%M%S)"
-_banner "${YELLOW}vagrant snapshot save \"${VM_SNAPSHOT_NAME}\""
-vagrant snapshot save --no-tty "${VM_SNAPSHOT_NAME}"
+if [ -z "${VAGRANT_SKIP_SNAPSHOT}" ] ; then
+  VM_SNAPSHOT_NAME="base-$(date +%Y%m%d-%H%M%S)"
+  _banner "${YELLOW}vagrant snapshot save \"${VM_SNAPSHOT_NAME}\""
+  vagrant snapshot save --no-tty "${VM_SNAPSHOT_NAME}"
+fi
 
 # ===============================================================
 # export VM as a VirtualBox appliance (.ova)
