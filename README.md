@@ -2,9 +2,9 @@
 
   ![Vagrant](https://img.shields.io/badge/-Vagrant-white.svg?style=plastic&logo=vagrant&logoColor=blue)
   ![Debian](https://img.shields.io/badge/-Debian-white.svg?style=plastic&logo=Debian&logoColor=red)
-  ![k3s](https://img.shields.io/badge/-k3s-white.svg?style=plastic&logo=k3s) / 
+  ![k3s](https://img.shields.io/badge/-k3s-white.svg?style=plastic&logo=k3s) /
   ![Linux](https://img.shields.io/badge/-Linux-gray.svg?style=plastic&logo=Linux)
-  ![macOS](https://img.shields.io/badge/-macOS-gray.svg?style=plastic&logo=apple) / 
+  ![macOS](https://img.shields.io/badge/-macOS-gray.svg?style=plastic&logo=apple) /
   [![test](https://github.com/pablon/vagrant-debian12-k3s/actions/workflows/test.yml/badge.svg)](https://github.com/pablon/vagrant-debian12-k3s/actions/workflows/test.yml)
 
   # vagrant-debian12-k3s
