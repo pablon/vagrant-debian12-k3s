@@ -1,15 +1,11 @@
 <div align=center>
 
-  [![test](https://github.com/pablon/vagrant-debian12-k3s/actions/workflows/test.yml/badge.svg)](https://github.com/pablon/vagrant-debian12-k3s/actions/workflows/test.yml)
-
   ![Vagrant](https://img.shields.io/badge/-Vagrant-white.svg?style=plastic&logo=vagrant&logoColor=blue)
   ![Debian](https://img.shields.io/badge/-Debian-white.svg?style=plastic&logo=Debian&logoColor=red)
-  ![k3s](https://img.shields.io/badge/-k3s-white.svg?style=plastic&logo=k3s)
-
-  Works on:
-
+  ![k3s](https://img.shields.io/badge/-k3s-white.svg?style=plastic&logo=k3s) / 
   ![Linux](https://img.shields.io/badge/-Linux-gray.svg?style=plastic&logo=Linux)
-  ![macOS](https://img.shields.io/badge/-macOS-gray.svg?style=plastic&logo=apple)
+  ![macOS](https://img.shields.io/badge/-macOS-gray.svg?style=plastic&logo=apple) / 
+  [![test](https://github.com/pablon/vagrant-debian12-k3s/actions/workflows/test.yml/badge.svg)](https://github.com/pablon/vagrant-debian12-k3s/actions/workflows/test.yml)
 
   # vagrant-debian12-k3s
 
@@ -43,6 +39,8 @@ or
 
 ```bash
 export KUBECONFIG="$(pwd)/outputs/vagrant-k3s.yaml"
+
+kubectl config current-context
 
 kubectl get node -o wide
 kubectl get all -A
