@@ -8,7 +8,7 @@ VM_RAM      = 4096
 VM_CPU      = 2
 VM_PARAVIRT = "minimal"
 VM_DISK     = "20GB"  # change if needed (default: 20GB)
-VM_NET_IP   = "192.168.2.25"
+VM_NET_IP   = "192.168.56.25"
 
 Vagrant.configure("2") do |config|
   config.vm.ignore_box_vagrantfile = true
