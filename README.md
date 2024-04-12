@@ -11,7 +11,8 @@
 
 </div>
 
-Need a quick kubernetes cluster to test some deployments or charts really quick?
+1. Need a quick kubernetes cluster to test some deployments or charts really quick?
+2. Don't have `minikube` or `kind`, and want to have it in a VM so you can share your appliance?
 
 This repo creates a Debian 12 VM with Vagrant using VirtualBox driver and installs k3s into it.
 
