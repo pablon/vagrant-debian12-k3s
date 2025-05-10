@@ -10,6 +10,8 @@ VM_PARAVIRT = "minimal"
 VM_DISK     = "20GB"  # change if needed (default: 20GB)
 VM_NET_IP   = "192.168.56.25"
 
+# $default_network_interface = `ip route | awk '/^default/ {printf "%s", $5; exit 0}'`
+
 Vagrant.configure("2") do |config|
   config.vm.ignore_box_vagrantfile = true
   config.vm.box = VM_BOX
@@ -27,14 +29,16 @@ Vagrant.configure("2") do |config|
     v.customize ["modifyvm", :id, "--audio-enabled", "off"]
   end
 
-  config.vm.network "private_network", ip: VM_NET_IP, hostname: true
+  config.vm.network "private_network", ip: VM_NET_IP
+  # config.vm.network "private_network", ip: VM_NET_IP, hostname: true
   # config.vm.network "private_network", type: "dhcp"
   # config.vm.network "public_network", bridge: "en0: Wi-Fi (AirPort)", use_dhcp_assigned_default_route: true
+  # config.vm.network "public_network", bridge: "#$default_network_interface"
 
   # Enable/disable the default /vagrant share
   # config.vm.synced_folder ".", "/vagrant", disabled: true
 
-  # in case you need to forward the ports (if not done globally)
+  # port forwarding
   config.vm.network "forwarded_port", id: "k8s-api", guest: 6443, host: 6443
   config.vm.network "forwarded_port", id: "https", guest: 443, host: 4443
   config.vm.network "forwarded_port", id: "ssh", guest: 22, host: 4422

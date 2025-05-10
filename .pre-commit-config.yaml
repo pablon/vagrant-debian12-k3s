@@ -7,7 +7,7 @@ repos:
       - id: vagrant-validate
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v5.0.0
     hooks:
       - id: end-of-file-fixer
       - id: mixed-line-ending
@@ -19,7 +19,7 @@ repos:
       - id: check-shebang-scripts-are-executable
 
   - repo: https://github.com/tcort/markdown-link-check
-    rev: v3.12.1
+    rev: v3.13.7
     hooks:
       - id: markdown-link-check
         args:

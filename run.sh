@@ -67,6 +67,9 @@ for i in vagrant VBoxManage ; do
 done
 
 # ===============================================================
+_banner "${GREEN}Runner Network info:\n${YELLOW}$(ip -br a s | grep 'UP' | column -t | sed -e 's|^|\t|')"
+
+# ===============================================================
 if ( VBoxManage list vms | grep "${VM_NAME}" &>/dev/null ) ; then
   _error "VM ${VM_NAME} already exists:
   \t${YELLOW}$(VBoxManage list vms | grep "${VM_NAME}")${NONE}
@@ -74,28 +77,29 @@ if ( VBoxManage list vms | grep "${VM_NAME}" &>/dev/null ) ; then
   exit 1
 fi
 
-_banner "${MAGENTA}Creating [${VM_PROVIDER}] vm ${CYAN}${VM_NAME}"
-
 # ===============================================================
 _banner "${YELLOW}vagrant box update"
-vagrant box update
+vagrant box update &>/dev/null
 
 # ===============================================================
+_banner "${GREEN}Creating vm ${CYAN}${VM_NAME}"
 _banner "${YELLOW}vagrant up"
 vagrant up || _error "vagrant up failed!"
 
 # ===============================================================
-_banner "Running: ${YELLOW}kubectl --kubeconfig ${OUTPUT_DIR}/${NODE_NAME}.yaml get node -o wide"
-kubectl --kubeconfig ${OUTPUT_DIR}/${NODE_NAME}.yaml get node -o wide ; echo
-
-_banner "Running: ${YELLOW}kubectl --kubeconfig ${OUTPUT_DIR}/${NODE_NAME}.yaml get all -A"
-kubectl --kubeconfig ${OUTPUT_DIR}/${NODE_NAME}.yaml get all -A ; echo
-
-# ===============================================================
-_banner "VM Network info:\n${YELLOW}$(vagrant ssh -- "ip -br a s | grep 'UP' | column -t | sed -e 's|^|\t|'")"
+_banner "${GREEN}Vagrant VM info:"
+_banner "Network:\n${YELLOW}$(vagrant ssh -- "ip -br a s | grep 'UP' | column -t | sed -e 's|^|\t|'")"
 _banner "root password = ${RED}${ROOT_PASSWD}"
 _banner "root password saved as ${CYAN}${OUTPUT_DIR}/root_password.txt"
 _banner "KUBECONFIG saved as ${CYAN}${OUTPUT_DIR}/${NODE_NAME}.yaml"
+ls -lh ${OUTPUT_DIR}/${NODE_NAME}.yaml
+
+# ===============================================================
+_banner "${GREEN}Running: ${YELLOW}kubectl --kubeconfig ${OUTPUT_DIR}/${NODE_NAME}.yaml get node -o wide"
+kubectl --kubeconfig ${OUTPUT_DIR}/${NODE_NAME}.yaml get node -o wide && echo || _error "kubectl command failed!"
+
+_banner "${GREEN}Running: ${YELLOW}kubectl --kubeconfig ${OUTPUT_DIR}/${NODE_NAME}.yaml get all -A"
+kubectl --kubeconfig ${OUTPUT_DIR}/${NODE_NAME}.yaml get all -A && echo || _error "kubectl command failed!"
 
 # ===============================================================
 if [ -z "${VAGRANT_SKIP_SNAPSHOT}" ] ; then

@@ -7,6 +7,7 @@ concurrency:
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 env:
   APT_OPTIONS: '-qqqy -o Dpkg::Progress-Fancy=0 -o APT::Color=0 -o Dpkg::Use-Pty=0'
@@ -16,7 +17,7 @@ env:
 jobs:
 
   run-e2e-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
 
@@ -39,7 +40,7 @@ jobs:
       - name: "Install virtualbox"
         id: virtualbox
         run: |
-          sudo apt install virtualbox-7.0 ${{ env.APT_OPTIONS }}
+          sudo apt install virtualbox-7.1 ${{ env.APT_OPTIONS }}
 
       - name: "Test"
         id: test
